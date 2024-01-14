@@ -20,16 +20,25 @@ public static class HelloSelenium
         string title = driver.Title;
 
         IList<IWebElement> elements = driver.FindElements(By.ClassName("grid-item"));
-        foreach (IWebElement e in elements)
+        try
         {
-            System.Console.WriteLine(e.Text);
-            //e.Click();
+
+            foreach (IWebElement e in elements)
+            {
+                System.Console.WriteLine(e.Text);
+                e.Click();
+            }
+        }
+        catch (StaleElementReferenceException ex) {
+
+            Console.WriteLine("exception caught");
 
         }
+
         driver.SwitchTo().NewWindow(WindowType.Tab);
 
         Console.WriteLine(title.ToString());
-        Console.WriteLine("boner");
+        Console.WriteLine("Test");
 
         //gridBox.Click();
         // driver.Quit();
