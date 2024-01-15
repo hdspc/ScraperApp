@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
@@ -14,19 +15,39 @@ public static class HelloSelenium
 
 
         driver.Navigate().GoToUrl("https://www.retrojunk.com/commercials?page=1&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
 
         string title = driver.Title;
 
         IList<IWebElement> elements = driver.FindElements(By.ClassName("grid-item"));
-        try
-        {
+        IList<IWebElement> imageLinks = driver.FindElements(By.ClassName("img-wrap"));
 
-            foreach (IWebElement e in elements)
+
+
+ 
+
+            try
+        {
+            // Create a StreamWriter to write to a text file
+            using (StreamWriter writer = new StreamWriter("image_urls.txt", true)) // Open the file in append mode
             {
-                System.Console.WriteLine(e.Text);
-                e.Click();
+
+                /* foreach (IWebElement e in elements)
+                 {
+                     driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+                     System.Console.WriteLine(e.Text);
+
+                 }
+                */
+                foreach (IWebElement e in imageLinks)
+                {
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+                    System.Console.WriteLine(e.GetAttribute("href"));
+                    writer.WriteLine(e.GetAttribute("href"));
+                }
+                Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
             }
         }
         catch (StaleElementReferenceException ex) {
@@ -35,12 +56,9 @@ public static class HelloSelenium
 
         }
 
-        driver.SwitchTo().NewWindow(WindowType.Tab);
-
         Console.WriteLine(title.ToString());
         Console.WriteLine("Test");
 
-        //gridBox.Click();
         // driver.Quit();
     }
 }
