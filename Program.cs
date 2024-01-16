@@ -28,18 +28,10 @@ public static class HelloSelenium
 
             try
         {
-            // Create a StreamWriter to write to a text file
-            using (StreamWriter writer = new StreamWriter("image_urls.txt", true)) // Open the file in append mode
-            {
+            
 
-                /* foreach (IWebElement e in elements)
-                 {
-                     driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-
-                     System.Console.WriteLine(e.Text);
-
-                 }
-                */
+                /* 
+               
                 foreach (IWebElement e in imageLinks)
                 {
                     driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
@@ -48,7 +40,11 @@ public static class HelloSelenium
                     writer.WriteLine(e.GetAttribute("href"));
                 }
                 Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
-            }
+                 */
+
+
+                loopMethod(imageLinks);
+           
         }
         catch (StaleElementReferenceException ex) {
 
@@ -60,5 +56,32 @@ public static class HelloSelenium
         Console.WriteLine("Test");
 
         // driver.Quit();
+
+         void loopMethod(IList<IWebElement> elementList)
+        {
+
+
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+
+            // Create a StreamWriter to write to a text file
+            using (StreamWriter writer = new StreamWriter("image_urls.txt", true)) // Open the file in append mode
+            {
+                writer.WriteLine(DateTime.Now.ToString());
+
+                foreach (IWebElement e in elementList)
+                {
+
+                    System.Console.WriteLine(e.GetAttribute("href"));
+                    writer.WriteLine(e.GetAttribute("href"));
+                }
+                Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
+            }
+
+
+        }
+
     }
+
+
 }
