@@ -11,45 +11,42 @@ public static class HelloSelenium
 {
     public static void Main()
     {
-        IWebDriver driver = new ChromeDriver();
+
+        var service = ChromeDriverService.CreateDefaultService();
+
+        int pageNum = 1;
+
+       
 
 
-        driver.Navigate().GoToUrl("https://www.retrojunk.com/commercials?page=1&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
+        var chromeOptions = new ChromeOptions();
+        chromeOptions.AddArgument("--test-type");
+        chromeOptions.AddExcludedArguments("excludeSwitches", "enable-logging");
+        //chromeOptions.AddUserProfilePreference
+
+        IWebDriver driver = new ChromeDriver(chromeOptions);
 
 
         string title = driver.Title;
 
-        IList<IWebElement> elements = driver.FindElements(By.ClassName("grid-item"));
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+        driver.Navigate().GoToUrl("https://www.retrojunk.com/commercials?page=1&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
+
         IList<IWebElement> imageLinks = driver.FindElements(By.ClassName("img-wrap"));
 
 
+        try
 
- 
-
-            try
         {
-            
-
-                /* 
-               
-                foreach (IWebElement e in imageLinks)
-                {
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-
-                    System.Console.WriteLine(e.GetAttribute("href"));
-                    writer.WriteLine(e.GetAttribute("href"));
-                }
-                Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
-                 */
-
-
-                loopMethod(imageLinks);
-           
+            loopMethod(imageLinks);
+            pageNum++;
         }
-        catch (StaleElementReferenceException ex) {
 
-            Console.WriteLine("exception caught");
-
+            catch (StaleElementReferenceException ex)
+       
+        {
+            Console.WriteLine("exception caught"+ ex.ToString());
         }
 
         Console.WriteLine(title.ToString());
@@ -58,28 +55,26 @@ public static class HelloSelenium
         // driver.Quit();
 
          void loopMethod(IList<IWebElement> elementList)
-        {
-
-
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-
-
-            // Create a StreamWriter to write to a text file
-            using (StreamWriter writer = new StreamWriter("image_urls.txt", true)) // Open the file in append mode
-            {
-                writer.WriteLine(DateTime.Now.ToString());
-
-                foreach (IWebElement e in elementList)
+       
                 {
+           
 
-                    System.Console.WriteLine(e.GetAttribute("href"));
-                    writer.WriteLine(e.GetAttribute("href"));
-                }
-                Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
-            }
+                    // Create a StreamWriter to write to a text file
+                    using (StreamWriter writer = new StreamWriter("image_urls.txt", true)) // Open the file in append mode
+                    {
+                        writer.WriteLine(DateTime.Now.ToString());
+
+                        foreach (IWebElement e in elementList)
+                        {
+                    System.Console.WriteLine("ldld");
+                            System.Console.WriteLine(e.GetAttribute("href"));
+                            writer.WriteLine(e.GetAttribute("href"));
+                        }
+                        Console.WriteLine("Image URLs from page " + driver.Url + " have been saved to image_urls.txt");
+                    }
 
 
-        }
+               }
 
     }
 
