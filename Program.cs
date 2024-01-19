@@ -30,19 +30,22 @@ public static class HelloSelenium
         string title = driver.Title;
 
         driver.Manage().Window.Minimize();
-        driver.Navigate().GoToUrl("https://www.retrojunk.com/commercials?page=1&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
+        driver.Navigate().GoToUrl($"https://www.retrojunk.com/commercials?page={pageNum}&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
        
-        IList<IWebElement> imageLinks = driver.FindElements(By.ClassName("img-wrap"));
 
 
         try
 
         {
+            IList<IWebElement> imageLinks = driver.FindElements(By.ClassName("img-wrap"));
+
             loopMethod(imageLinks);
-            //pageNum++;
+            pageNum++;
+            driver.Navigate().GoToUrl($"https://www.retrojunk.com/commercials?page={pageNum}&sortColumn=DateAdded&sortOrder=Desc&decade=1990");
+
         }
 
-            catch (StaleElementReferenceException ex)
+        catch (StaleElementReferenceException ex)
        
         {
             Console.WriteLine("exception caught"+ ex.ToString());
